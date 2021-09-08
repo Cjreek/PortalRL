@@ -1,0 +1,2 @@
+class Blocking:
+    pass
