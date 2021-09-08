@@ -1,2 +1,0 @@
-PLAYER = 0
-ENEMIES = 1
