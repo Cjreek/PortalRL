@@ -3,9 +3,13 @@ import sound
 from data import sfx
 
 class Damageable:
-    def __init__(self, maxHP: int, deadEntity: List) -> None:
+    def __init__(self, maxHP: int, deadEntity: List, startHP: int = None, removeOnDeath: bool = True) -> None:
         self.maxHP = maxHP
-        self.hp = maxHP
+        if (startHP is not None):
+            self.hp = startHP
+        else:
+            self.hp = maxHP
+        self.removeOnDeath = removeOnDeath
         self.deadEntity = deadEntity
     
     @property

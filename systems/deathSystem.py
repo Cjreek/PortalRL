@@ -18,5 +18,7 @@ class DeathSystem(esper.Processor):
             if damageable.isDead:
                 if (self.world.has_component(entity, Player)):
                     game.state = GameState.GAME_OVER
-                mobs.spawn(self.world, damageable.deadEntity, position.X, position.Y)
-                self.world.delete_entity(entity)
+                if damageable.deadEntity:
+                    mobs.spawn(self.world, damageable.deadEntity, position.X, position.Y)
+                if damageable.removeOnDeath:
+                    self.world.delete_entity(entity)
