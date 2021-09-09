@@ -22,9 +22,9 @@ class MovementSystem(esper.Processor):
         level: Level
         _, level = self.world.get_component(Level)[0]
         for entity, (position, velocity) in self.world.get_components(Position, Velocity):
-            if (velocity.dx != 0) or (velocity.dy != 0):
-                destX = position.X + velocity.dx
-                destY = position.Y + velocity.dy
+            for step in velocity.steps:
+                destX = position.X + step.dx
+                destY = position.Y + step.dy
                 if level.isWalkable(destX, destY):
                     collisionEntity = self.entityAt(destX, destY, True)
                     if not collisionEntity:
@@ -43,3 +43,4 @@ class MovementSystem(esper.Processor):
                         defenderInfo: Info = self.world.try_component(collisionEntity, Info)
                         if (attackerMelee) and (defenderDamageable) and (attackerInfo.faction != defenderInfo.faction):
                             defenderDamageable.takeDamage(attackerMelee.damage)
+                velocity.steps.remove(step)

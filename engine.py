@@ -7,7 +7,7 @@ from data import layout
 
 from systems import DebugSystem
 from systems import LevelRenderSystem, EntityRenderSystem, GUIRenderSystem, RenderFinalizeSystem
-from systems import InputSystem, PlayerControlSystem, LevelGenerationSystem, ComputeFOVSystem, ComputeLightingSystem, AISystem
+from systems import InputSystem, LevelGenerationSystem, ComputeFOVSystem, ComputeLightingSystem, AISystem
 from systems import MovementSystem, DeathSystem
 
 class Engine:
@@ -34,8 +34,7 @@ class Engine:
         world.add_processor(LevelGenerationSystem(), 5)
         world.add_processor(InputSystem(), 4)
         world.add_processor(DebugSystem(), 3)
-        world.add_processor(PlayerControlSystem(), 3)
-        # world.add_processor(AISystem(), 3)
+        world.add_processor(AISystem(), 3)
 
         world.add_processor(MovementSystem(), 2)
         world.add_processor(DeathSystem(), 1)

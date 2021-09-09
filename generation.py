@@ -83,7 +83,7 @@ def generateLevel(world: esper.World, level: Level, playerPos: Position, minRoom
             level.rooms.append(newRoom)
 
             # Mobs 
-            numMobs = level.rng.randint(10, 15) 
+            numMobs = level.rng.randint(0, 3) 
             for _ in range(numMobs):
                 mobs.spawn(world, level.rng.choice(mobs.MOBLIST), level.rng.randint(newRoom.x1+1, newRoom.x2-1), level.rng.randint(newRoom.y1+1, newRoom.y2-1))
 

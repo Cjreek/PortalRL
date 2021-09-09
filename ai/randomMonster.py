@@ -10,5 +10,5 @@ class RandomMonsterAI(AIClass):
     def process(self, entity, world: esper.World, rng: Random):
         velocity: Velocity = world.try_component(entity, Velocity)
         if (velocity):
-            velocity.dx = rng.randint(-1, 1)
-            velocity.dy = rng.randint(-1, 1)
+            velocity.addStep(rng.randint(-1, 1), rng.randint(-1, 1))
+            return True

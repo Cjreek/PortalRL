@@ -3,5 +3,5 @@ from random import Random
 import esper
 
 class AIClass:
-    def process(self, entity, world: esper.World, rng: Random):
-        pass
+    def process(self, entity, world: esper.World, rng: Random) -> bool:
+        return False
