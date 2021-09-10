@@ -1,5 +1,6 @@
 import esper
 import numpy
+import copy
 
 from tcod import Console
 
@@ -39,7 +40,10 @@ class LevelRenderSystem(esper.Processor):
             sliceX = slice(self.posX, self.posX + level.width)
             sliceY = slice(self.posY, self.posY + level.height)
 
-            selectedTiles = numpy.select(condlist=[playerFOV.fov], choicelist=[level.tiles["visibleGfx"]], default=tiles.shroudGfx)
+            if game.showMap:
+                selectedTiles = copy.deepcopy(level.tiles["visibleGfx"])
+            else:
+                selectedTiles = numpy.select(condlist=[playerFOV.fov], choicelist=[level.tiles["visibleGfx"]], default=tiles.shroudGfx)
 
             # lighting
             if game.useLighting:

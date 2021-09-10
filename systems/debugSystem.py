@@ -17,5 +17,7 @@ class DebugSystem(esper.Processor):
         if (input.Debug):
             if input.DebugKey == tcod.event.K_F2:
                 game.useLighting = not game.useLighting
+            if input.DebugKey == tcod.event.K_F3:
+                game.showMap = not game.showMap
             if input.DebugKey == tcod.event.K_F5:
                 game.state = GameState.REQUEST_LEVEL

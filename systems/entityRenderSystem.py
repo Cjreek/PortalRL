@@ -22,7 +22,7 @@ class EntityRenderSystem(esper.Processor):
         _, level = self.world.get_component(Level)[0]
         _, (_, playerFOV) = self.world.get_components(Player, FOV)[0]    
         for _, (pos, rend) in sorted(self.world.get_components(Position, Renderable), key=lambda item: item[1][1].prio):
-            if playerFOV.isVisible(pos.X, pos.Y):
+            if playerFOV.isVisible(pos.X, pos.Y) or (game.showMap):
                 if game.useLighting:
                     hsl = color.toHLS(rend.fg)
                     hsl = (hsl[0], hsl[1] * (level.lightmap["level"][pos.X, pos.Y][0] / lighting.MAX_LIGHT_LEVEL), hsl[2])
