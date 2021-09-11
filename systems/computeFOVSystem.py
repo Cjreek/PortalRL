@@ -1,22 +1,21 @@
-import esper
 from tcod.map import compute_fov
 import tcod.constants
 
-from components import Position, FOV, Level
+from game import Game
+from systems.baseSystem import BaseSystem
+from components import Position, FOV, Level, Light
 
 # (Level), (Position, FOV)
-class ComputeFOVSystem(esper.Processor):
-    def __init__(self) -> None:
-        super().__init__()
-        self.world: esper.World = self.world
-
-    def process(self, *args, **kwargs):
+class ComputeFOVSystem(BaseSystem):
+    def execute(self, game: Game, *args, **kwargs):
         position: Position
         fov: FOV
         level: Level
         _, level = self.world.get_component(Level)[0]
-        for _, (position, fov) in self.world.get_components(Position, FOV):
+        for entity, (position, fov) in self.world.get_components(Position, FOV):
             if (fov.dirty):
-                # fov.fov = compute_fov(level.tiles["transparent"], (position.X, position.Y), radius=fov.viewDistance)
-                fov.fov = compute_fov(level.tiles["transparent"], (position.X, position.Y), radius=fov.viewDistance, algorithm=tcod.constants.FOV_BASIC)
+                fov.fov = compute_fov(level.tiles["transparent"], (position.X, position.Y), radius=fov.viewDistance, algorithm=tcod.constants.FOV_SYMMETRIC_SHADOWCAST)
+                light: Light = self.world.try_component(entity, Light)
+                if light:
+                    fov.lightFov = compute_fov(level.tiles["transparent"], (position.X, position.Y), radius=light.intensity+1, light_walls=False, algorithm=tcod.constants.FOV_SYMMETRIC_SHADOWCAST)
                 fov.dirty = False

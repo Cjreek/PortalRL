@@ -10,3 +10,4 @@ from systems.renderFinalizeSystem import RenderFinalizeSystem
 from systems.deathSystem import DeathSystem
 from systems.debugSystem import DebugSystem
 from systems.aiSystem import AISystem
+from systems.baseSystem import BaseSystem

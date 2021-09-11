@@ -38,8 +38,8 @@ grass = makeTile(
 wall = makeTile(
     walkable=False, 
     transparent=False, 
-    darkGfx=(ord("#"), (60, 60, 60), (0, 0, 0)),
-    visibleGfx=(ord("#"), (160, 160, 160), (0, 0, 0)),
+    visibleGfx=(ord("█"), (160, 160, 160), (0, 0, 0)),
+    darkGfx=(ord("█"), (60, 60, 60), (0, 0, 0)),
 )
 
 floortiles = [floor, grass]

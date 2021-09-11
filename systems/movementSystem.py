@@ -1,22 +1,36 @@
-from components.blocking import Blocking
 from typing import Optional
-import esper
 
-from components import Position, Velocity, Level, Light, FOV, Damageable, Melee, Renderable, Info
+from game import Game
+from systems.baseSystem import BaseSystem
+from components import Position, Velocity, Level, Light, FOV, Damageable, Melee, Renderable, Info, Blocking
 
 # (Position, Velocity), (Level)
-class MovementSystem(esper.Processor):
-    def __init__(self) -> None:
-        super().__init__()
-        self.world: esper.World = self.world
-
+class MovementSystem(BaseSystem):
     def entityAt(self, x: int, y: int, blockingOnly: bool = False) -> Optional[int]:
         if blockingOnly:
             return next((entity for entity, (pos, _, _) in self.world.get_components(Position, Renderable, Blocking) if (pos.X == x) and (pos.Y == y)), None)
         else:
             return next((entity for entity, (pos, _) in self.world.get_components(Position, Renderable) if (pos.X == x) and (pos.Y == y)), None)
 
-    def process(self, *args, **kwargs):
+    def moveEntity(self, entity, position: Position, destX: int, destY: int):
+        position.X = destX
+        position.Y = destY
+        if self.world.has_component(entity, FOV):
+            fov = self.world.component_for_entity(entity, FOV)
+            fov.dirty = True
+        if self.world.has_component(entity, Light):
+            light = self.world.component_for_entity(entity, Light)
+            light.dirty = True
+    
+    def doEntityMeleeAttack(self, attackerEntity, defenderEntity):
+        attackerMelee = self.world.try_component(attackerEntity, Melee)
+        attackerInfo: Info = self.world.try_component(attackerEntity, Info)
+        defenderDamageable = self.world.try_component(defenderEntity, Damageable)
+        defenderInfo: Info = self.world.try_component(defenderEntity, Info)
+        if (attackerMelee) and (defenderDamageable) and (attackerInfo.faction != defenderInfo.faction):
+            defenderDamageable.takeDamage(attackerMelee.damage)
+
+    def execute(self, game: Game, *args, **kwargs):
         position: Position
         velocity: Velocity
         level: Level
@@ -28,19 +42,7 @@ class MovementSystem(esper.Processor):
                 if level.isWalkable(destX, destY):
                     collisionEntity = self.entityAt(destX, destY, True)
                     if not collisionEntity:
-                        position.X = destX
-                        position.Y = destY
-                        if self.world.has_component(entity, FOV):
-                            fov = self.world.component_for_entity(entity, FOV)
-                            fov.dirty = True
-                        if self.world.has_component(entity, Light):
-                            light = self.world.component_for_entity(entity, Light)
-                            light.dirty = True
+                        self.moveEntity(entity, position, destX, destY)
                     else:
-                        attackerMelee = self.world.try_component(entity, Melee)
-                        attackerInfo: Info = self.world.try_component(entity, Info)
-                        defenderDamageable = self.world.try_component(collisionEntity, Damageable)
-                        defenderInfo: Info = self.world.try_component(collisionEntity, Info)
-                        if (attackerMelee) and (defenderDamageable) and (attackerInfo.faction != defenderInfo.faction):
-                            defenderDamageable.takeDamage(attackerMelee.damage)
+                        self.doEntityMeleeAttack(entity, collisionEntity)
                 velocity.steps.remove(step)

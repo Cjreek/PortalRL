@@ -1,23 +1,21 @@
-import esper
 from math import dist
 from tcod import Console
 
 import guiFunc
 
-from gamestate import Game
-from data import layout
+from game import Game
+from systems.baseSystem import BaseSystem
 from components import Position, Renderable, FOV
 from components import Player, Info, Damageable, Velocity, Blocking
+from data import layout
 
 # (Position, Renderable)
-class GUIRenderSystem(esper.Processor):
+class GUIRenderSystem(BaseSystem):
     def __init__(self, console: Console) -> None:
         super().__init__()
         self.console = console
-        self.world: esper.World = self.world
 
-    def process(self, *args, **kwargs):
-        game: Game = kwargs["game"]
+    def execute(self, game: Game, *args, **kwargs):
         guiFunc.drawFrame(self.console, layout.LBAR_OFFSET_X, layout.LBAR_OFFSET_Y, layout.LBAR_OFFSET_X + layout.LBAR_WIDTH, layout.LBAR_OFFSET_Y + layout.LBAR_HEIGHT)
         guiFunc.drawFrame(self.console, layout.BBAR_OFFSET_X, layout.BBAR_OFFSET_Y, layout.BBAR_OFFSET_X + layout.BBAR_WIDTH, layout.BBAR_OFFSET_Y + layout.BBAR_HEIGHT)
         

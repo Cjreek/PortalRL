@@ -1,18 +1,13 @@
-import esper
 import tcod.event
 
+from game import Game
+from systems.baseSystem import BaseSystem
 from components import Input
 
 # (Input)
-class InputSystem(esper.Processor):
-    def __init__(self) -> None:
-        super().__init__()
-        self.world: esper.World = self.world
-
-    def process(self, *args, **kwargs):
+class InputSystem(BaseSystem):
+    def execute(self, game: Game, *args, **kwargs):
         input: Input
-        for _, input in self.world.get_component(Input):
-            input.clear()
 
         for event in tcod.event.get():
             if isinstance(event, tcod.event.Quit):

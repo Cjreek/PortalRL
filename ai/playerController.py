@@ -1,13 +1,12 @@
-from ai.aiClass import AIClass
 from random import Random
 import esper
 
+from game import Game, GameState
 from ai import AIClass
-
 from components import Input, Velocity
 
 class PlayerController(AIClass):
-    def process(self, entity, world: esper.World, rng: Random):
+    def process(self, entity, game: Game, world: esper.World, rng: Random):
         input: Input = world.component_for_entity(entity, Input)
         velocity: Velocity = world.component_for_entity(entity, Velocity)
 
@@ -21,7 +20,9 @@ class PlayerController(AIClass):
         elif (input.DownLeft): velocity.addStep(-1, 1)
         elif (input.DownRight): velocity.addStep(1, 1)
         elif (input.Wait): pass
-        elif (input.Escape): raise SystemExit()
+        elif (input.Escape): game.changeState(GameState.MAINMENU)
         else: result = False
+
+        input.clear()
 
         return result

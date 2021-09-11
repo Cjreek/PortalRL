@@ -1,24 +1,23 @@
-import esper
 from tcod import Console
 
 import color
-from gamestate import Game
-from data import layout, lighting
+
+from game import Game
+from systems.baseSystem import BaseSystem
 from components import Position, Renderable, Player, FOV, Level
+from data import layout, lighting
 
 # (Level), (FOV), (Position, Renderable)
-class EntityRenderSystem(esper.Processor):
+class EntityRenderSystem(BaseSystem):
     def __init__(self, console: Console) -> None:
         super().__init__()
         self.console = console
-        self.world: esper.World = self.world
 
-    def process(self, *args, **kwargs):
+    def execute(self, game: Game, *args, **kwargs):
         pos: Position 
         rend: Renderable
         level: Level  
         playerFOV: FOV
-        game: Game = kwargs["game"]
         _, level = self.world.get_component(Level)[0]
         _, (_, playerFOV) = self.world.get_components(Player, FOV)[0]    
         for _, (pos, rend) in sorted(self.world.get_components(Position, Renderable), key=lambda item: item[1][1].prio):

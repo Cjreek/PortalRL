@@ -4,18 +4,18 @@ import copy
 
 from tcod import Console
 
-from gamestate import Game
-from data import tiles, layout, lighting
+from game import Game
+from systems.baseSystem import BaseSystem
 from components import Level, Player, FOV, Light
+from data import tiles, layout, lighting
 
 # (Level), (Player, FOV)
-class LevelRenderSystem(esper.Processor):
+class LevelRenderSystem(BaseSystem):
     def __init__(self, console: Console, posX: int, posY: int) -> None:
         super().__init__()
         self.console = console
         self.posX = posX
         self.posY = posY
-        self.world: esper.World = self.world
         self.__maxLevelLighting = numpy.full((layout.LEVEL_WIDTH, layout.LEVEL_HEIGHT, 3), fill_value=[lighting.MAX_LIGHT_LEVEL,lighting.MAX_LIGHT_LEVEL, lighting.MAX_LIGHT_LEVEL], order="F")
 
     def updateLighting(self, lightmap):
@@ -30,10 +30,9 @@ class LevelRenderSystem(esper.Processor):
     def applyLighting(self, tiles, lightmap):
         tiles["fg"] = ((tiles["fg"] + lightmap["color"]) / 2) * lightmap["level"] / lighting.MAX_LIGHT_LEVEL
 
-    def process(self, *args, **kwargs): 
+    def execute(self, game: Game, *args, **kwargs): 
         level: Level
         playerFOV: FOV
-        game: Game = kwargs["game"]
         _, (_, playerFOV) = self.world.get_components(Player, FOV)[0]
         for _, level in sorted(self.world.get_component(Level)):
 

@@ -2,7 +2,9 @@ import time
 import esper
 import tcod
 
-from gamestate import Game
+from mainMenu import MainMenu
+
+from game import Game, GameState
 from data import layout
 
 from systems import DebugSystem
@@ -17,11 +19,20 @@ class Engine:
             title=title,
             vsync=False)
         self.console = tcod.Console(screenWidth, screenHeight, order="F")
+        # Game
         self.game = Game()
-        self.world = esper.World()
-        self.initECS(self.world)
+        self.game.registerStateChangeListener(self.gameStateChange)
+        self.world: esper.World = None
+        # Mainmenu
+        self.mainMenu = MainMenu(self.game)
+        # FPS
         self.frametimes = []
         self.lastFrame = 0
+
+    def gameStateChange(self, newState):
+        if newState == GameState.NEW_GAME:
+            self.initECS()
+            self.game.changeState(GameState.REQUEST_LEVEL)
 
     def calcFPS(self):
         self.frametimes.append(int(time.process_time()*1000) - self.lastFrame)
@@ -30,25 +41,35 @@ class Engine:
             self.game.fps = 1000 / (sum(self.frametimes) / len(self.frametimes))
             self.frametimes = []
         
-    def initECS(self, world: esper.World):
-        world.add_processor(LevelGenerationSystem(), 5)
-        world.add_processor(InputSystem(), 4)
-        world.add_processor(DebugSystem(), 3)
-        world.add_processor(AISystem(), 3)
+    def initECS(self):
+        if self.world:
+            self.world.clear_database()
+            self.world.clear_cache()
 
-        world.add_processor(MovementSystem(), 2)
-        world.add_processor(DeathSystem(), 1)
-        world.add_processor(ComputeFOVSystem(), 0)
+        self.world = esper.World()
+        
+        self.world.add_processor(LevelGenerationSystem(), 5)
+        self.world.add_processor(InputSystem(), 4)
+        self.world.add_processor(DebugSystem(), 3)
+        self.world.add_processor(AISystem(), 3)
 
-        world.add_processor(ComputeLightingSystem(), -1)
-        world.add_processor(LevelRenderSystem(self.console, layout.LEVEL_OFFSET_X, layout.LEVEL_OFFSET_Y), -2)
-        world.add_processor(EntityRenderSystem(self.console), -3)
-        world.add_processor(GUIRenderSystem(self.console), -4)
-        world.add_processor(RenderFinalizeSystem(self.context, self.console), -99)
+        self.world.add_processor(MovementSystem(), 2)
+        self.world.add_processor(DeathSystem(), 1)
+        self.world.add_processor(ComputeFOVSystem(), 0)
+
+        self.world.add_processor(ComputeLightingSystem(), -1)
+        self.world.add_processor(LevelRenderSystem(self.console, layout.LEVEL_OFFSET_X, layout.LEVEL_OFFSET_Y), -2)
+        self.world.add_processor(EntityRenderSystem(self.console), -3)
+        self.world.add_processor(GUIRenderSystem(self.console), -4)
+        self.world.add_processor(RenderFinalizeSystem(self.context, self.console), -99)
 
     def run(self):
         self.lastFrame = int(time.process_time() * 1000)
         while (True):
-            self.world.process(game=self.game)
+            if self.game.state == GameState.MAINMENU:
+                self.mainMenu.handleEvents()
+                self.mainMenu.render(self.context, self.console)
+            else:
+                self.world.process(game=self.game)
             self.calcFPS()
             time.sleep(0.001)

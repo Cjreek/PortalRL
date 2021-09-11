@@ -1,17 +1,12 @@
-import esper
 import tcod.event
 
-from gamestate import Game, GameState
+from game import Game, GameState
+from systems.baseSystem import BaseSystem
 from components import Debug, Input
 
 # (Player, Input, Velocity)
-class DebugSystem(esper.Processor):
-    def __init__(self) -> None:
-        super().__init__()
-        self.world: esper.World = self.world
-
-    def process(self, *args, **kwargs):
-        game: Game = kwargs["game"]
+class DebugSystem(BaseSystem):
+    def execute(self, game: Game, *args, **kwargs):
         input: Input
         _, (_, input) = self.world.get_components(Debug, Input)[0]
         if (input.Debug):
@@ -20,4 +15,4 @@ class DebugSystem(esper.Processor):
             if input.DebugKey == tcod.event.K_F3:
                 game.showMap = not game.showMap
             if input.DebugKey == tcod.event.K_F5:
-                game.state = GameState.REQUEST_LEVEL
+                game.changeState(GameState.REQUEST_LEVEL)
