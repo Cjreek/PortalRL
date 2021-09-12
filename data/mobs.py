@@ -1,4 +1,3 @@
-from ai.deadPlayer import DeadPlayerController
 import copy
 from typing import List
 
@@ -6,7 +5,7 @@ import esper
 
 from data import renderprio, layout, factions, lighting
 from components import Renderable, Velocity, Player, Input, FOV, Light, Damageable, Info, Melee, Position, Blocking, AI
-from ai import RandomMonsterAI, PlayerController
+from ai import RandomMonsterAI, PlayerController, DeadPlayerController
 
 BODY = [Info(name="Body"), Renderable("%", [120,0,0], [0,0,0], renderprio.LOW)]
 PLAYER_BODY = [Info(name="Player"), Player(), Input(), AI(1, DeadPlayerController()), Renderable("%", [180,0,0], [0,0,0], renderprio.HIGH), Damageable(20, None, startHP=0, removeOnDeath=False), FOV(layout.LEVEL_WIDTH // 2), Light((255,0,0), lighting.MAX_LIGHT_LEVEL, False)]

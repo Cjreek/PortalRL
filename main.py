@@ -1,3 +1,4 @@
+import os
 import pygame.display
 
 from engine import Engine
@@ -9,7 +10,7 @@ def disablePyGame():
 
 def main():
     disablePyGame()
-    engine = Engine("PortalRL", layout.SCREEN_WIDTH, layout.SCREEN_HEIGHT, "resources\\tilesets\\Cooz-curses-square-16x16.png")
+    engine = Engine("PortalRL", layout.SCREEN_WIDTH, layout.SCREEN_HEIGHT, os.path.join("resources", "tilesets", "Cooz-curses-square-16x16.png"))
     engine.run()
     
 if __name__ == "__main__":

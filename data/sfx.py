@@ -1,5 +1,6 @@
+import os
 from pygame.mixer import Sound
 
-__sfxFolder = "resources\\sfx\\"
+__sfxFolder = os.path.join("resources", "sfx")
 
-HIT = Sound(__sfxFolder + "hit.wav")
+HIT = Sound(os.path.join(__sfxFolder, "hit.wav"))
