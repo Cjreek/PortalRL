@@ -54,6 +54,8 @@ class MainMenu(tcod.event.EventDispatch[bool]):
             self.selectedIndex = max(self.selectedIndex - 1, 0) 
         elif key in (tcod.event.K_DOWN, tcod.event.K_KP_2, tcod.event.K_j):
            self.selectedIndex = min(self.selectedIndex + 1, len(self.visibleItems)-1)
+        elif (key == tcod.event.K_ESCAPE) and (self.game.gameIsActive):
+            self.resumeGame()
         elif key == tcod.event.K_RETURN:
             self.visibleItems[self.selectedIndex].executeFunc()
 
