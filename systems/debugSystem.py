@@ -14,5 +14,7 @@ class DebugSystem(BaseSystem):
                 game.useLighting = not game.useLighting
             if input.DebugKey == tcod.event.K_F3:
                 game.showMap = not game.showMap
+            if input.DebugKey == tcod.event.K_F4:
+                game.showFOV = not game.showFOV
             if input.DebugKey == tcod.event.K_F5:
                 game.changeState(GameState.REQUEST_LEVEL)

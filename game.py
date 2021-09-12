@@ -11,11 +11,13 @@ class GameState(Enum):
 class Game:
     def __init__(self) -> None:
         self.__state = GameState.MAINMENU
-        self.useLighting = True
-        self.showMap = False
         self.gameIsActive = False
         self.fps = 0
         self.stateListeners = []
+        # Debug Flags
+        self.useLighting = True
+        self.showMap = False
+        self.showFOV = False
 
     @property
     def state(self):

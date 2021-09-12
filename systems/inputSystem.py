@@ -9,12 +9,16 @@ class InputSystem(BaseSystem):
     def execute(self, game: Game, *args, **kwargs):
         input: Input
 
+        for _, input in self.world.get_component(Input):
+            input.clear()
+
         for event in tcod.event.get():
             if isinstance(event, tcod.event.Quit):
                 raise SystemExit()
 
             if isinstance(event, tcod.event.KeyDown):
                 event: tcod.event.KeyDown
+               
                 key = event.sym
 
                 up = key in (tcod.event.K_UP, tcod.event.K_KP_8, tcod.event.K_k)

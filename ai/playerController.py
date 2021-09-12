@@ -20,8 +20,9 @@ class PlayerController(AIClass):
         elif (input.DownLeft): velocity.addStep(-1, 1)
         elif (input.DownRight): velocity.addStep(1, 1)
         elif (input.Wait): pass
-        elif (input.Escape): game.changeState(GameState.MAINMENU)
-        else: result = False
+        else:
+            result = False
+            if (input.Escape): game.changeState(GameState.MAINMENU)
 
         input.clear()
 

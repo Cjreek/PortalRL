@@ -11,3 +11,4 @@ from systems.deathSystem import DeathSystem
 from systems.debugSystem import DebugSystem
 from systems.aiSystem import AISystem
 from systems.baseSystem import BaseSystem
+from systems.overlayRenderSystem import OverlayRenderSystem
