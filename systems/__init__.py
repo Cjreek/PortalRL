@@ -12,3 +12,5 @@ from systems.debugSystem import DebugSystem
 from systems.aiSystem import AISystem
 from systems.baseSystem import BaseSystem
 from systems.overlayRenderSystem import OverlayRenderSystem
+from systems.inventoryRenderSystem import InventoryRenderSystem
+from systems.triggerSystem import TriggerSystem

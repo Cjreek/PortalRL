@@ -7,7 +7,7 @@ import esper
 import tcod
 import pyperclip
 
-from data import tiles, mobs
+from data import tiles, mobs, items
 from components import Level, Position
     
 class RectangularRoom:
@@ -82,12 +82,17 @@ def generateLevel(world: esper.World, level: Level, playerPos: Position, minRoom
         if not failed:
             level.rooms.append(newRoom)
 
-            # Mobs 
             if len(level.rooms) > 1:
+                # Mobs 
                 numMobs = level.rng.randint(5, 8)
                 for _ in range(numMobs):
                     mobs.spawn(world, level.rng.choice(mobs.MOBLIST), level.rng.randint(newRoom.x1+1, newRoom.x2-1), level.rng.randint(newRoom.y1+1, newRoom.y2-1))
 
+                # Items
+                numItems = level.rng.randint(0, 1)
+                for _ in range(numItems):
+                    items.spawn(world, level.rng.choice(items.ITEMPOOL), level.rng.randint(newRoom.x1+1, newRoom.x2-1), level.rng.randint(newRoom.y1+1, newRoom.y2-1))
+                    
             if len(level.rooms) > 1:
                 for x, y in makeCorridor(level.rng, level.rooms[-2].center, newRoom.center):
                     level.tiles[x, y] = tiles.floor

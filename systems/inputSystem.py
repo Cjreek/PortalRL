@@ -1,11 +1,17 @@
+from tcod.context import Context
 import tcod.event
 
 from game import Game
 from systems.baseSystem import BaseSystem
 from components import Input
+from data import layout
 
 # (Input)
 class InputSystem(BaseSystem):
+    def __init__(self, context: Context) -> None:
+        super().__init__()
+        self.context = context
+
     def execute(self, game: Game, *args, **kwargs):
         input: Input
 
@@ -13,8 +19,17 @@ class InputSystem(BaseSystem):
             input.clear()
 
         for event in tcod.event.get():
+            self.context.convert_event(event)
+
             if isinstance(event, tcod.event.Quit):
                 raise SystemExit()
+
+            if isinstance(event, tcod.event.MouseMotion):
+                event: tcod.event.MouseMotion
+                for _, input in self.world.get_component(Input):
+                    input.MouseX, input.MouseY = event.tile
+                    input.MouseLevelX = input.MouseX - layout.LEVEL_OFFSET_X
+                    input.MouseLevelY = input.MouseY - layout.LEVEL_OFFSET_Y
 
             if isinstance(event, tcod.event.KeyDown):
                 event: tcod.event.KeyDown
@@ -30,8 +45,11 @@ class InputSystem(BaseSystem):
                 downLeft = key in (tcod.event.K_KP_1, tcod.event.K_b)
                 downRight = key in (tcod.event.K_KP_3, tcod.event.K_n)
                 wait = key in (tcod.event.K_KP_5, tcod.event.K_PLUS)
-                escape = key == tcod.event.K_ESCAPE
-                debug = (key >= tcod.event.K_F1) and (key <= tcod.event.K_F12)
+                escape = (key == tcod.event.K_ESCAPE) and not (event.repeat)
+
+                inventoryKey = (key == tcod.event.K_i) and not (event.repeat)
+
+                debug = (key >= tcod.event.K_F1) and (key <= tcod.event.K_F12) and not (event.repeat)
 
                 for _, input in self.world.get_component(Input):
                     input.Up = up
@@ -44,5 +62,8 @@ class InputSystem(BaseSystem):
                     input.DownRight = downRight
                     input.Wait = wait
                     input.Escape = escape
+
+                    input.inventoryKey = inventoryKey
+
                     input.Debug = debug
                     input.DebugKey = key

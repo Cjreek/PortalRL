@@ -13,3 +13,7 @@ from components.info import Info
 from components.melee import Melee
 from components.blocking import Blocking
 from components.ai import AI
+from components.inventory import Inventory 
+from components.item import Item
+from components.inventoryPosition import InventoryPosition
+from components.trigger import Trigger

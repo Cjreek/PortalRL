@@ -8,18 +8,19 @@ import tcod.constants
 from game import Game, GameState
 
 class MenuItem:
-    def __init__(self, title: str, visibleFunc, executeFunc) -> None:
+    def __init__(self, title: str, visibleFunc, executeFunc, hotkey) -> None:
         self.title = title
         self.visibleFunc = visibleFunc
         self.executeFunc = executeFunc
+        self.hotkey = hotkey
 
 class MainMenu(tcod.event.EventDispatch[bool]):
     def __init__(self, game: Game) -> None:
         self.game = game
         self.menuItems = [
-            MenuItem("Resume Game", lambda: game.gameIsActive, self.resumeGame), 
-            MenuItem("New Game", lambda: True, self.newGame), 
-            MenuItem("Quit", lambda: True, self.quitGame)
+            MenuItem("(R)esume Game", lambda: game.gameIsActive, self.resumeGame, tcod.event.K_r), 
+            MenuItem("(N)ew Game", lambda: True, self.newGame, tcod.event.K_n), 
+            MenuItem("(Q)uit", lambda: True, self.quitGame, tcod.event.K_q)
         ]
         self.maxItemWidth = max((len(item.title) for item in self.menuItems))
         self.visibleItems: List[MenuItem] = []
@@ -45,7 +46,11 @@ class MainMenu(tcod.event.EventDispatch[bool]):
 
     def ev_keydown(self, event: tcod.event.KeyDown) -> Optional[bool]:
         key = event.sym
-        if key in (tcod.event.K_UP, tcod.event.K_KP_8, tcod.event.K_k):
+
+        hotkeyItem = next((item for item in self.menuItems if item.hotkey == key), None)
+        if (hotkeyItem):
+            hotkeyItem.executeFunc()
+        elif key in (tcod.event.K_UP, tcod.event.K_KP_8, tcod.event.K_k):
             self.selectedIndex = max(self.selectedIndex - 1, 0) 
         elif key in (tcod.event.K_DOWN, tcod.event.K_KP_2, tcod.event.K_j):
            self.selectedIndex = min(self.selectedIndex + 1, len(self.visibleItems)-1)

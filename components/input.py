@@ -10,6 +10,13 @@ class Input:
         self.DownRight: bool = False
         self.Wait: bool = False
         self.Escape: bool = False
+
+        self.inventoryKey: bool = False
+
+        self.MouseX: int = 0
+        self.MouseY: int = 0
+        self.MouseLevelX: int = 0
+        self.MouseLevelY: int = 0
         
         self.Debug: bool = False
         self.DebugKey: int = -1
@@ -25,5 +32,8 @@ class Input:
         self.DownRight = False
         self.Wait = False
         self.Escape = False
+
+        self.inventoryKey = False
+
         self.Debug = False
         self.DebugKey = -1

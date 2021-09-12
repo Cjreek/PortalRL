@@ -8,9 +8,9 @@ from game import Game, GameState
 from data import layout
 
 from systems import DebugSystem
-from systems import LevelRenderSystem, EntityRenderSystem, GUIRenderSystem, OverlayRenderSystem, RenderFinalizeSystem
+from systems import LevelRenderSystem, EntityRenderSystem, GUIRenderSystem, OverlayRenderSystem, InventoryRenderSystem, RenderFinalizeSystem
 from systems import InputSystem, LevelGenerationSystem, ComputeFOVSystem, ComputeLightingSystem, AISystem
-from systems import MovementSystem, DeathSystem
+from systems import MovementSystem, DeathSystem, TriggerSystem
 
 class Engine:
     def __init__(self, title, screenWidth, screenHeight, tileset):
@@ -20,6 +20,7 @@ class Engine:
             vsync=False)
         self.console = tcod.Console(screenWidth, screenHeight, order="F")
         self.overlay = tcod.Console(layout.LEVEL_WIDTH, layout.LEVEL_HEIGHT, order="F")
+        self.windowConsole = tcod.Console(screenWidth, screenHeight, order="F")
         # Game
         self.game = Game()
         self.game.registerStateChangeListener(self.gameStateChange)
@@ -50,20 +51,22 @@ class Engine:
         self.world = esper.World()
         
         self.world.add_processor(LevelGenerationSystem(), 5)
-        self.world.add_processor(InputSystem(), 4)
+        self.world.add_processor(InputSystem(self.context), 4)
         self.world.add_processor(DebugSystem(), 3)
         self.world.add_processor(AISystem(), 3)
 
         self.world.add_processor(MovementSystem(), 2)
-        self.world.add_processor(DeathSystem(), 1)
-        self.world.add_processor(ComputeFOVSystem(), 0)
-        self.world.add_processor(ComputeLightingSystem(), -1)
+        self.world.add_processor(TriggerSystem(), 1)
+        self.world.add_processor(DeathSystem(), 0)
+        self.world.add_processor(ComputeFOVSystem(), -1)
+        self.world.add_processor(ComputeLightingSystem(), -2)
 
-        self.world.add_processor(LevelRenderSystem(self.console, layout.LEVEL_OFFSET_X, layout.LEVEL_OFFSET_Y), -2)
-        self.world.add_processor(EntityRenderSystem(self.console), -3)
+        self.world.add_processor(LevelRenderSystem(self.console, layout.LEVEL_OFFSET_X, layout.LEVEL_OFFSET_Y), -3)
+        self.world.add_processor(EntityRenderSystem(self.console), -4)
         self.world.add_processor(GUIRenderSystem(self.console), -5)
         self.world.add_processor(OverlayRenderSystem(self.overlay), -6)
-        self.world.add_processor(RenderFinalizeSystem(self.context, self.console, self.overlay), -99)
+        self.world.add_processor(InventoryRenderSystem(self.windowConsole), -7)
+        self.world.add_processor(RenderFinalizeSystem(self.context, self.console, self.overlay, self.windowConsole), -99)
 
     def run(self):
         self.lastFrame = int(time.process_time() * 1000)

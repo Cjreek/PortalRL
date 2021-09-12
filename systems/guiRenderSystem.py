@@ -17,8 +17,10 @@ class GUIRenderSystem(BaseSystem):
 
     def execute(self, game: Game, *args, **kwargs):
         guiFunc.drawFrame(self.console, layout.LBAR_OFFSET_X, layout.LBAR_OFFSET_Y, layout.LBAR_OFFSET_X + layout.LBAR_WIDTH, layout.LBAR_OFFSET_Y + layout.LBAR_HEIGHT)
+        guiFunc.drawFrame(self.console, layout.RBAR_OFFSET_X, layout.RBAR_OFFSET_Y, layout.RBAR_OFFSET_X + layout.RBAR_WIDTH, layout.RBAR_OFFSET_Y + layout.RBAR_HEIGHT)
         guiFunc.drawFrame(self.console, layout.BBAR_OFFSET_X, layout.BBAR_OFFSET_Y, layout.BBAR_OFFSET_X + layout.BBAR_WIDTH, layout.BBAR_OFFSET_Y + layout.BBAR_HEIGHT)
         
+        # Player HP
         info: Info
         playerHP: Damageable
         playerFov: FOV
@@ -28,6 +30,7 @@ class GUIRenderSystem(BaseSystem):
         guiFunc.drawBar(self.console, 1, 5, layout.LBAR_WIDTH-2, 0, playerHP.maxHP, playerHP.hp, [0,0,0], [255, 0, 0])
         self.console.print(1, 5, "HP: " + str(playerHP.hp) + "/" + str(playerHP.maxHP))
 
+        # Mob List
         mobHP: Damageable
         position: Position
         n = 0
@@ -36,10 +39,10 @@ class GUIRenderSystem(BaseSystem):
         for mobEntity, (_, position, info, mobHP) in mobList:
             if playerFov.isVisible(position.X, position.Y) and (mobEntity != playerEntity):
                 if dist([playerPos.X, playerPos.Y], [position.X, position.Y]) < 2:
-                    self.console.print(1, 7+n*2, info.name, fg=[255,255,0])
+                    self.console.print(1, 8+n*2, info.name, fg=[255,255,0])
                 else:
-                    self.console.print(1, 7+n*2, info.name)            
-                guiFunc.drawBar(self.console, 1, 8+n*2, layout.LBAR_WIDTH-2, 0, mobHP.maxHP, mobHP.hp, [0,0,0], [255, 0, 0])
+                    self.console.print(1, 8+n*2, info.name)            
+                guiFunc.drawBar(self.console, 1, 9+n*2, layout.LBAR_WIDTH-2, 0, mobHP.maxHP, mobHP.hp, [0,0,0], [255, 0, 0])
                 n += 1
 
         ## DEBUG ##

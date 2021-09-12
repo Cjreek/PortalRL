@@ -6,6 +6,7 @@ class GameState(Enum):
     NEW_GAME = auto(),
     REQUEST_LEVEL = auto(),
     PLAYING = auto()
+    INVENTORY = auto()
     GAME_OVER = auto()
 
 class Game:

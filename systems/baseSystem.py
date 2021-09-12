@@ -11,7 +11,7 @@ class BaseSystem(esper.Processor):
         pass
 
     def canExecute(self, gameState: GameState):
-        return gameState in [GameState.PLAYING, GameState.GAME_OVER]
+        return gameState in [GameState.PLAYING, GameState.INVENTORY, GameState.GAME_OVER]
 
     def execute(self, game: Game, *args, **kwargs):
         pass
