@@ -6,7 +6,7 @@ from tcod import Console
 from game import Game
 from systems.baseSystem import BaseSystem
 from components import Level, Player, FOV, Light
-from data import tiles, layout, lighting
+from data import tiles, colors, lighting
 
 # (Level), (Player, FOV)
 class LevelRenderSystem(BaseSystem):
@@ -19,7 +19,7 @@ class LevelRenderSystem(BaseSystem):
     def updateLighting(self, lightmap):
         light: Light
         lightmap["level"] = 0
-        lightmap["color"] = (255,255,255)
+        lightmap["color"] = colors.WHITE
         for _, light in self.world.get_component(Light):
             totalLevel = lightmap["level"] + light.lightMap["level"]
             lightmap["color"][light.mask] = (lightmap["color"][light.mask] * (lightmap["level"][light.mask] / totalLevel[light.mask])[:, None]) + (light.lightMap["color"][light.mask] * (light.lightMap["level"][light.mask] / totalLevel[light.mask])[:, None])

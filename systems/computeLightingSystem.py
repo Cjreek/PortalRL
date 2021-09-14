@@ -4,7 +4,7 @@ import numpy
 from game import Game
 from systems.baseSystem import BaseSystem
 from components import Position, Light, FOV, Player
-from data import layout
+from data import layout, colors
                     
 # (Level), (Position, FOV, Light)
 class ComputeLightingSystem(BaseSystem):
@@ -29,7 +29,7 @@ class ComputeLightingSystem(BaseSystem):
         _, (_, playerFov) = self.world.get_components(Player, FOV)[0]
         for _, (position, fov, light) in self.world.get_components(Position, FOV, Light):
             if (light.dirty):
-                light.lightMap["color"] = (255,255,255)
+                light.lightMap["color"] = colors.WHITE
                 light.lightMap["level"] = 0
                 light.mask[:] = False
                 fovIntersection = playerFov.fov & fov.lightFov
