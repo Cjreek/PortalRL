@@ -1,2 +1,4 @@
 tcod>=11.13
 numpy>=1.18
+pygame>=2.0 
+esper>=1.5
