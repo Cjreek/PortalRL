@@ -22,13 +22,17 @@ class MovementSystem(BaseSystem):
             light = self.world.component_for_entity(entity, Light)
             light.dirty = True
     
-    def doEntityMeleeAttack(self, attackerEntity, defenderEntity):
+    def doEntityMeleeAttack(self, game: Game, attackerEntity, defenderEntity):
         attackerMelee = self.world.try_component(attackerEntity, Melee)
         attackerInfo: Info = self.world.try_component(attackerEntity, Info)
         defenderDamageable = self.world.try_component(defenderEntity, Damageable)
         defenderInfo: Info = self.world.try_component(defenderEntity, Info)
         if (attackerMelee) and (defenderDamageable) and (attackerInfo.faction != defenderInfo.faction):
             defenderDamageable.takeDamage(attackerMelee.damage)
+            game.logMessage(f"{attackerInfo.name} hits {defenderInfo.name} for {attackerMelee.damage}")
+            if defenderDamageable.isDead:
+                game.logMessage(f"{attackerInfo.name} kills {defenderInfo.name}")
+
 
     def execute(self, game: Game, *args, **kwargs):
         position: Position
@@ -44,5 +48,5 @@ class MovementSystem(BaseSystem):
                     if not collisionEntity:
                         self.moveEntity(entity, position, destX, destY)
                     else:
-                        self.doEntityMeleeAttack(entity, collisionEntity)
+                        self.doEntityMeleeAttack(game, entity, collisionEntity)
                 velocity.steps.remove(step)

@@ -1,4 +1,4 @@
-import esper
+from typing import List
 from enum import Enum, auto
 
 class GameState(Enum):
@@ -15,6 +15,7 @@ class Game:
         self.gameIsActive = False
         self.fps = 0
         self.stateListeners = []
+        self.log: List[str] = []
         # Debug Flags
         self.useLighting = True
         self.showMap = False
@@ -33,3 +34,6 @@ class Game:
     def registerStateChangeListener(self, listener):
         if not listener in self.stateListeners:
             self.stateListeners.append(listener)
+
+    def logMessage(self, message: str):
+        self.log.append(message)

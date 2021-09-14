@@ -7,7 +7,7 @@ from game import Game
 from systems.baseSystem import BaseSystem
 from components import Position, Renderable, FOV
 from components import Player, Info, Damageable, Velocity, Blocking
-from data import layout
+from data import layout, colors
 
 # (Position, Renderable)
 class GUIRenderSystem(BaseSystem):
@@ -44,6 +44,14 @@ class GUIRenderSystem(BaseSystem):
                     self.console.print(1, 8+n*2, info.name)            
                 guiFunc.drawBar(self.console, 1, 9+n*2, layout.LBAR_WIDTH-2, 0, mobHP.maxHP, mobHP.hp, [0,0,0], [255, 0, 0])
                 n += 1
+
+        # Message Log
+        n = 1
+        for msg in reversed(game.log):
+            if n > layout.BBAR_HEIGHT - 2:
+                break
+            self.console.print(20, layout.BBAR_OFFSET_Y + n, msg, colors.WHITE)
+            n += 1
 
         ## DEBUG ##
         entityCount = len(self.world.get_components(Blocking, Position, Renderable))

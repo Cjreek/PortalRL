@@ -18,4 +18,4 @@ class PickupTrigger(TriggerFunction):
         world.add_component(triggerEntity, InventoryPosition(inventory.id))
         world.remove_component(triggerEntity, Position)
 
-        print(activatorInfo.name + " picks up " + triggerInfo.name)
+        game.logMessage(f"{activatorInfo.name} picks up {triggerInfo.name}")
