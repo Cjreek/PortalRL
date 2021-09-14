@@ -3,7 +3,6 @@ import esper
 from game import Game
 
 class TriggerFunction:
-
     def requiredComponents(self):
         return [Velocity]
 

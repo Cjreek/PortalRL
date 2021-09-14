@@ -7,7 +7,7 @@ from data import colors
 from components import Position, Renderable, Info, Item, Inventory, InventoryPosition, Trigger
 from triggers import PickupTrigger
 
-LEATHER_ARMOR = [Info("Leather Armor"), Item(), Renderable(')', fg=colors.ITEM)]
+LEATHER_ARMOR = [Info("Leather Armor"), Item("Leather Armor", "()", colors.ITEM), Renderable(')', fg=colors.ITEM)]
 
 ITEMPOOL = [LEATHER_ARMOR]
 

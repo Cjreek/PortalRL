@@ -36,6 +36,4 @@ class PlayerController(AIClass):
             elif game.state == GameState.PLAYING:
                 game.changeState(GameState.MAINMENU)
 
-        input.clear()
-
         return result

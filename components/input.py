@@ -19,7 +19,7 @@ class Input:
         self.MouseLevelY: int = 0
         
         self.Debug: bool = False
-        self.DebugKey: int = -1
+        self.RawKey: int = -1
 
     def clear(self):
         self.Up = False
@@ -36,4 +36,4 @@ class Input:
         self.inventoryKey = False
 
         self.Debug = False
-        self.DebugKey = -1
+        self.RawKey = -1

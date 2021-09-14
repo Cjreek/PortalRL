@@ -1,4 +1,5 @@
-from typing import Tuple
+from typing import Tuple, List
+from collections.abc import Iterable
 
 from tcod import Console
 import tcod
@@ -14,3 +15,13 @@ def drawBar(console: Console, x: int, y: int, width: int, min: int, max: int, va
     console.draw_rect(x, y, width, 1, ord(" "), bg=bg)
     if (value > min):
         console.draw_rect(x, y, int(width * (value / (max-min))), 1, ord(" "), bg=fill)
+
+def printFmt(console: Console, x: int, y: int, format: List):
+    currentColor = console.default_fg
+    currPos = x
+    for item in format:
+        if isinstance(item, str):
+            console.print(currPos, y, item, currentColor)
+            currPos += len(item)
+        elif isinstance(item, Iterable) and (len(item) == 3):
+            currentColor = item

@@ -66,4 +66,4 @@ class InputSystem(BaseSystem):
                     input.inventoryKey = inventoryKey
 
                     input.Debug = debug
-                    input.DebugKey = key
+                    input.RawKey = key

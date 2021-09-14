@@ -10,11 +10,11 @@ class DebugSystem(BaseSystem):
         input: Input
         _, (_, input) = self.world.get_components(Debug, Input)[0]
         if (input.Debug):
-            if input.DebugKey == tcod.event.K_F2:
+            if input.RawKey == tcod.event.K_F2:
                 game.useLighting = not game.useLighting
-            if input.DebugKey == tcod.event.K_F3:
+            if input.RawKey == tcod.event.K_F3:
                 game.showMap = not game.showMap
-            if input.DebugKey == tcod.event.K_F4:
+            if input.RawKey == tcod.event.K_F4:
                 game.showFOV = not game.showFOV
-            if input.DebugKey == tcod.event.K_F5:
+            if input.RawKey == tcod.event.K_F5:
                 game.changeState(GameState.REQUEST_LEVEL)
