@@ -15,19 +15,18 @@ class LevelRenderSystem(BaseSystem):
         self.console = console
         self.posX = posX
         self.posY = posY
-        self.__maxLevelLighting = numpy.full((layout.LEVEL_WIDTH, layout.LEVEL_HEIGHT, 3), fill_value=[lighting.MAX_LIGHT_LEVEL,lighting.MAX_LIGHT_LEVEL, lighting.MAX_LIGHT_LEVEL], order="F")
 
     def updateLighting(self, lightmap):
         light: Light
-        lightmap["level"] = (0,0,0)
+        lightmap["level"] = 0
         lightmap["color"] = (255,255,255)
         for _, light in self.world.get_component(Light):
             totalLevel = lightmap["level"] + light.lightMap["level"]
-            lightmap["color"][light.mask] = (lightmap["color"][light.mask] * (lightmap["level"][light.mask] / totalLevel[light.mask])) + (light.lightMap["color"][light.mask] * (light.lightMap["level"][light.mask] / totalLevel[light.mask]))
-            lightmap["level"][light.mask] = numpy.minimum(lightmap["level"][light.mask] + light.lightMap["level"][light.mask], self.__maxLevelLighting[light.mask])
+            lightmap["color"][light.mask] = (lightmap["color"][light.mask] * (lightmap["level"][light.mask] / totalLevel[light.mask])[:, None]) + (light.lightMap["color"][light.mask] * (light.lightMap["level"][light.mask] / totalLevel[light.mask])[:, None])
+            lightmap["level"][light.mask] = numpy.minimum(lightmap["level"][light.mask] + light.lightMap["level"][light.mask], lighting.MAX_LIGHT_LEVEL)
 
     def applyLighting(self, tiles, lightmap):
-        tiles["fg"] = ((tiles["fg"] + lightmap["color"]) / 2) * lightmap["level"] / lighting.MAX_LIGHT_LEVEL
+        tiles["fg"] = ((tiles["fg"] + lightmap["color"]) / 2) * (lightmap["level"] / lighting.MAX_LIGHT_LEVEL)[:,:, None]
 
     def execute(self, game: Game, *args, **kwargs): 
         level: Level

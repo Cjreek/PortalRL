@@ -24,7 +24,7 @@ class EntityRenderSystem(BaseSystem):
             if playerFOV.isVisible(pos.X, pos.Y) or (game.showMap):
                 if game.useLighting:
                     hsl = colorFunc.toHLS(rend.fg)
-                    hsl = (hsl[0], hsl[1] * (level.lightmap["level"][pos.X, pos.Y][0] / lighting.MAX_LIGHT_LEVEL), hsl[2])
+                    hsl = (hsl[0], hsl[1] * (level.lightmap["level"][pos.X, pos.Y] / lighting.MAX_LIGHT_LEVEL), hsl[2])
                     rgb = colorFunc.toRGB(hsl)
                     rgb = (int(rgb[0]), int(rgb[1]), int(rgb[2]))
                     self.console.print(layout.LEVEL_OFFSET_X + pos.X, layout.LEVEL_OFFSET_Y + pos.Y, rend.char, rgb, rend.bg)
