@@ -5,13 +5,13 @@ import esper
 
 from data import renderprio, layout, factions, lighting
 from components import Renderable, Velocity, Player, Input, FOV, Light, Damageable, Info, Melee, Position, Blocking, AI
-from components import Inventory
+from components import Inventory, Equipment
 from ai import RandomMonsterAI, PlayerController, DeadPlayerController
 
 BODY = [Info(name="Body"), Renderable("%", [120,0,0], [0,0,0], renderprio.LOW)]
 PLAYER_BODY = [Info(name="Player"), Player(), Input(), AI(1, DeadPlayerController()), Renderable("%", [180,0,0], [0,0,0], renderprio.HIGH), Damageable(20, None, startHP=0, removeOnDeath=False), FOV(layout.LEVEL_WIDTH // 2), Light((255,0,0), lighting.MAX_LIGHT_LEVEL, False)]
 
-PLAYER = [Info(name="Player", faction=factions.PLAYER), Player(), Inventory(2), Input(), AI(10, PlayerController(), startsReady=True), Damageable(20, PLAYER_BODY), Melee(3), Blocking(), FOV(layout.LEVEL_WIDTH // 2), Velocity(), Renderable("☻", [255,0,0], [0,0,0], renderprio.HIGH), Light((255,255,0), 8, False)]
+PLAYER = [Info(name="Player", faction=factions.PLAYER), Player(), Inventory(2), Equipment(), Input(), AI(10, PlayerController(), startsReady=True), Damageable(20, PLAYER_BODY), Melee(3), Blocking(), FOV(layout.LEVEL_WIDTH // 2), Velocity(), Renderable("☻", [255,0,0], [0,0,0], renderprio.HIGH), Light((255,255,0), 8, False)]
 
 SLIME = [Info(name="Slime"), Renderable("o", [0, 180, 0]), Damageable(5, BODY), Melee(1), Blocking(), AI(20, RandomMonsterAI()), FOV(layout.LEVEL_WIDTH // 2), Light((0,160,0), 6, False), Velocity()]
 SHADOW = [Info(name="Shadow"), Renderable("s", [90, 90, 90]), Damageable(7, BODY), Melee(3), Blocking(), AI(5, RandomMonsterAI()), Velocity()]

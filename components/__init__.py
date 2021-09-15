@@ -17,3 +17,4 @@ from components.inventory import Inventory
 from components.item import Item
 from components.inventoryPosition import InventoryPosition
 from components.trigger import Trigger
+from components.equipment import Equipment

@@ -6,3 +6,7 @@ class Inventory:
         self.items = []
         self.id = Inventory.idCounter 
         Inventory.idCounter += 1
+    
+    @property
+    def capacity(self):
+        return self.maxCapacity - len(self.items)

@@ -4,12 +4,14 @@ from typing import List
 import esper
 
 from data import colors
+from data.enums import EquipmentSlot
 from components import Position, Renderable, Info, Item, Inventory, InventoryPosition, Trigger
 from triggers import PickupTrigger
 
-LEATHER_ARMOR = [Info("Leather Armor"), Item("Leather Armor", "()", colors.ITEM), Renderable(')', fg=colors.ITEM)]
+LEATHER_ARMOR = [Info("Leather Armor"), Item("Leather Armor", "()", EquipmentSlot.BODY), Renderable(')', fg=colors.ITEM)]
+LONGSWORD = [Info("Longsword"), Item("Longsword", "┼─", EquipmentSlot.MAINHAND), Renderable('/', fg=colors.ITEM)]
 
-ITEMPOOL = [LEATHER_ARMOR]
+ITEMPOOL = [LEATHER_ARMOR, LONGSWORD]
 
 def create(world: esper.World, itemTemplate: List, inventory: Inventory):
     item = copy.deepcopy(itemTemplate)

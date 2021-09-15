@@ -10,6 +10,7 @@ class Input:
         self.DownRight: bool = False
         self.Wait: bool = False
         self.Drop: bool = False
+        self.Equip: bool = False
         self.Escape: bool = False
 
         self.inventoryKey: bool = False
@@ -33,6 +34,7 @@ class Input:
         self.DownRight = False
         self.Wait = False
         self.Drop = False
+        self.Equip = False
         self.Escape = False
 
         self.inventoryKey = False
