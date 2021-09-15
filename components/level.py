@@ -1,12 +1,13 @@
-from random import Random
+import tcod
 import numpy
 
+from rng import RNG
 from data import tiles, lighting
 
 class Level:
     def __init__(self, width: int, height: int, seed: int) -> None:
         self.seed = seed
-        self.rng: Random = None
+        self.rng: RNG = None
         self.width = width
         self.height = height
         self.tiles = numpy.full((self.width, self.height), fill_value=tiles.wall, order="F")
@@ -16,7 +17,7 @@ class Level:
     
     def setSeed(self, seed):
         self.seed = seed
-        self.rng = Random(self.seed)
+        self.rng = RNG(self.seed)
 
     def isWalkable(self, x: int, y: int) -> bool:
         return self.tiles["walkable"][x, y]

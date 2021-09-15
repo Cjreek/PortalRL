@@ -25,6 +25,10 @@ class Game:
     def state(self):
         return self.__state
 
+    def reset(self):
+        self.log.clear()
+        self.stateListeners.clear
+
     def changeState(self, state: GameState):
         if (self.__state != state):
             self.__state = state

@@ -15,6 +15,7 @@ class MovementSystem(BaseSystem):
     def moveEntity(self, entity, position: Position, destX: int, destY: int):
         position.X = destX
         position.Y = destY
+        position.changed = True
         if self.world.has_component(entity, FOV):
             fov = self.world.component_for_entity(entity, FOV)
             fov.dirty = True
@@ -40,6 +41,7 @@ class MovementSystem(BaseSystem):
         level: Level
         _, level = self.world.get_component(Level)[0]
         for entity, (position, velocity) in self.world.get_components(Position, Velocity):
+            position.changed = False
             for step in velocity.steps:
                 destX = position.X + step.dx
                 destY = position.Y + step.dy

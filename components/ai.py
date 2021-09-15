@@ -1,4 +1,4 @@
-from random import Random
+from rng import RNG
 from ai import AIClass
 
 class AI:
@@ -9,7 +9,7 @@ class AI:
         else:
             self.initiative = initiative
         self.aiClass = aiClass
-        self.rng = Random() # TODO: muss geseedet sein
+        self.rng = RNG() # TODO: muss geseedet sein
 
     def tickInitiative(self):
         if self.initiative > 0:

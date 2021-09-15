@@ -16,7 +16,7 @@ class LevelGenerationSystem(BaseSystem):
         self.world.clear_database()
         self.world.clear_cache()
 
-        seed = int.from_bytes(random.randbytes(4), byteorder='little', signed=False)
+        seed = random.getrandbits(32)
         level = Level(layout.LEVEL_WIDTH, layout.LEVEL_HEIGHT, seed)
         self.world.create_entity(level)
         

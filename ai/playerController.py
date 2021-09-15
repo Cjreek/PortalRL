@@ -1,12 +1,12 @@
-from random import Random
 import esper
 
+from rng import RNG
 from game import Game, GameState
 from ai import AIClass
 from components import Input, Velocity
 
 class PlayerController(AIClass):
-    def process(self, entity, game: Game, world: esper.World, rng: Random):
+    def process(self, entity, game: Game, world: esper.World, rng: RNG):
         input: Input = world.component_for_entity(entity, Input)
         
         result = False

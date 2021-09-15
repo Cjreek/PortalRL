@@ -1,6 +1,3 @@
-from typing import List
-from components.item import Item
-
 class Inventory:
     idCounter: int = 1
 

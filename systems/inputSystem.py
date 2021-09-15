@@ -45,6 +45,7 @@ class InputSystem(BaseSystem):
                 downLeft = key in (tcod.event.K_KP_1, tcod.event.K_b)
                 downRight = key in (tcod.event.K_KP_3, tcod.event.K_n)
                 wait = key in (tcod.event.K_KP_5, tcod.event.K_PLUS)
+                drop = (key == tcod.event.K_d)
                 escape = (key == tcod.event.K_ESCAPE) and not (event.repeat)
 
                 inventoryKey = (key == tcod.event.K_i) and not (event.repeat)
@@ -61,6 +62,7 @@ class InputSystem(BaseSystem):
                     input.DownLeft = downLeft
                     input.DownRight = downRight
                     input.Wait = wait
+                    input.Drop = drop
                     input.Escape = escape
 
                     input.inventoryKey = inventoryKey

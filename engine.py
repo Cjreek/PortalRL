@@ -33,6 +33,7 @@ class Engine:
 
     def gameStateChange(self, newState):
         if newState == GameState.NEW_GAME:
+            self.game.reset()
             self.initECS()
             self.game.changeState(GameState.REQUEST_LEVEL)
 
@@ -65,7 +66,7 @@ class Engine:
         self.world.add_processor(EntityRenderSystem(self.console), -4)
         self.world.add_processor(GUIRenderSystem(self.console), -5)
         self.world.add_processor(OverlayRenderSystem(self.overlay), -6)
-        self.world.add_processor(InventoryRenderSystem(self.windowConsole), -7)
+        self.world.add_processor(InventoryRenderSystem(self.game, self.windowConsole), -7)
         self.world.add_processor(RenderFinalizeSystem(self.context, self.console, self.overlay, self.windowConsole), -99)
 
     def run(self):

@@ -15,7 +15,12 @@ class PickupTrigger(TriggerFunction):
         inventory = world.component_for_entity(activatorEntity, Inventory)
         triggerInfo = world.component_for_entity(triggerEntity, Info)
 
-        world.add_component(triggerEntity, InventoryPosition(inventory.id))
-        world.remove_component(triggerEntity, Position)
-
-        game.logMessage(f"{activatorInfo.name} picks up {triggerInfo.name}")
+        if len(inventory.items) < inventory.maxCapacity:
+            inventory.items.append(triggerEntity)
+            world.add_component(triggerEntity, InventoryPosition(inventory.id))
+            world.remove_component(triggerEntity, Position)
+            game.logMessage(f"{activatorInfo.name} picks up {triggerInfo.name}")
+            return True
+        else:
+            game.logMessage("You can't carry any more items!")
+            return False

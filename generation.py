@@ -1,12 +1,12 @@
 from __future__ import annotations
 
 from typing import Iterator, Tuple
-import random
 
 import esper
 import tcod
 import pyperclip
 
+from rng import RNG
 from data import tiles, mobs, items
 from components import Level, Position
     
@@ -45,7 +45,7 @@ class RectangularRoom:
     def intersects(self, otherRoom: RectangularRoom) -> bool:
         return (self.x1 <= otherRoom.x2) and (self.x2 >= otherRoom.x1) and (self.y1 <= otherRoom.y2) and (self.y2 >= otherRoom.y1)
 
-def makeCorridor(rng: random.Random, start: Tuple[int, int], end: Tuple[int, int]) -> Iterator[Tuple[int, int]]:
+def makeCorridor(rng: RNG, start: Tuple[int, int], end: Tuple[int, int]) -> Iterator[Tuple[int, int]]:
     x1, y1 = start
     x2, y2 = end
     if rng.random() < 0.5:
