@@ -9,7 +9,7 @@ class AISystem(BaseSystem):
         self.waitingFor = []
 
     def reset(self):
-        self.waitingFor = []
+        self.waitingFor.clear()
     
     def execute(self, game: Game, *args, **kwargs):
         ai: AI

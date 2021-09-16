@@ -1,14 +1,6 @@
-from typing import Tuple
 import numpy
+from data.types import LightLevel
 
-LightLevel = numpy.dtype([
-    ("color", numpy.double, 3),
-    ("level", numpy.byte),
-])
-
-def Light(color: Tuple[float, float, float], level: int):
-    return numpy.array((color, level), dtype=LightLevel)
-
-DARKNESS = Light([0,0,0], 0)
+DARKNESS = numpy.array(([0,0,0], 0), dtype=LightLevel)
 
 MAX_LIGHT_LEVEL = 10
