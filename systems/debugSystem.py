@@ -4,7 +4,7 @@ from game import Game, GameState
 from systems.baseSystem import BaseSystem
 from components import Debug, Input
 
-# (Player, Input, Velocity)
+# (Debug, Input)
 class DebugSystem(BaseSystem):
     def execute(self, game: Game, *args, **kwargs):
         input: Input

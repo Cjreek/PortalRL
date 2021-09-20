@@ -1,16 +1,16 @@
 from game import Game, GameState
 from systems.baseSystem import BaseSystem
-from components import Player, Position, Damageable, Velocity
+from components import Player, Position, Damageable, Blocking
 from data import mobs
 
-# (Player, Input, Velocity)
+# (Player, Input, Blocking)
 class DeathSystem(BaseSystem):   
     def execute(self, game: Game, *args, **kwargs):
         position: Position
         damageable: Damageable
         for entity, (position, damageable) in self.world.get_components(Position, Damageable):
             if damageable.isDead:
-                if (self.world.has_component(entity, Player) and self.world.has_component(entity, Velocity)):
+                if (self.world.has_component(entity, Player) and self.world.has_component(entity, Blocking)):
                     game.gameIsActive = False
                     game.changeState(GameState.GAME_OVER)
                 if damageable.deadEntity:

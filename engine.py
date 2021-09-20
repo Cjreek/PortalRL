@@ -10,7 +10,7 @@ from data import layout
 from systems import DebugSystem
 from systems import LevelRenderSystem, EntityRenderSystem, GUIRenderSystem, OverlayRenderSystem, InventoryRenderSystem, RenderFinalizeSystem
 from systems import InputSystem, LevelGenerationSystem, ComputeFOVSystem, ComputeLightingSystem, AISystem
-from systems import MovementSystem, DeathSystem, TriggerSystem
+from systems import DeathSystem, TriggerSystem, PreprocessSystem
 
 class Engine:
     def __init__(self, title, screenWidth, screenHeight, tileset):
@@ -25,6 +25,7 @@ class Engine:
         self.game = Game()
         self.game.registerStateChangeListener(self.gameStateChange)
         self.world: esper.World = None
+        self.ecsPriority = 100
         # Mainmenu
         self.mainMenu = MainMenu(self.game)
         # FPS
@@ -44,30 +45,36 @@ class Engine:
             self.game.fps = 1000 / (sum(self.frametimes) / len(self.frametimes))
             self.frametimes = []
         
+    def nextPrio(self):
+        self.ecsPriority -= 1
+        return self.ecsPriority
+
     def initECS(self):
         if self.world:
             self.world.clear_database()
             self.world.clear_cache()
+            self.ecsPriority = 100
 
         self.world = esper.World()
         
-        self.world.add_processor(LevelGenerationSystem(), 5)
-        self.world.add_processor(InputSystem(self.context), 4)
-        self.world.add_processor(DebugSystem(), 3)
-        self.world.add_processor(AISystem(), 3)
+        self.world.add_processor(LevelGenerationSystem(), self.nextPrio())
+        self.world.add_processor(PreprocessSystem(), self.nextPrio())
+        self.world.add_processor(InputSystem(self.context), self.nextPrio())
+        
+        self.world.add_processor(DebugSystem(), self.nextPrio())
+        self.world.add_processor(AISystem(), self.nextPrio())
+        
+        self.world.add_processor(TriggerSystem(), self.nextPrio())
+        self.world.add_processor(DeathSystem(), self.nextPrio())
+        self.world.add_processor(ComputeFOVSystem(), self.nextPrio())
+        self.world.add_processor(ComputeLightingSystem(), self.nextPrio())
 
-        self.world.add_processor(MovementSystem(), 2)
-        self.world.add_processor(TriggerSystem(), 1)
-        self.world.add_processor(DeathSystem(), 0)
-        self.world.add_processor(ComputeFOVSystem(), -1)
-        self.world.add_processor(ComputeLightingSystem(), -2)
-
-        self.world.add_processor(LevelRenderSystem(self.console, layout.LEVEL_OFFSET_X, layout.LEVEL_OFFSET_Y), -3)
-        self.world.add_processor(EntityRenderSystem(self.console), -4)
-        self.world.add_processor(GUIRenderSystem(self.console), -5)
-        self.world.add_processor(OverlayRenderSystem(self.overlay), -6)
-        self.world.add_processor(InventoryRenderSystem(self.game, self.windowConsole), -7)
-        self.world.add_processor(RenderFinalizeSystem(self.context, self.console, self.overlay, self.windowConsole), -99)
+        self.world.add_processor(LevelRenderSystem(self.console, layout.LEVEL_OFFSET_X, layout.LEVEL_OFFSET_Y), self.nextPrio())
+        self.world.add_processor(EntityRenderSystem(self.console), self.nextPrio())
+        self.world.add_processor(GUIRenderSystem(self.console), self.nextPrio())
+        self.world.add_processor(OverlayRenderSystem(self.overlay), self.nextPrio())
+        self.world.add_processor(InventoryRenderSystem(self.game, self.windowConsole), self.nextPrio())
+        self.world.add_processor(RenderFinalizeSystem(self.context, self.console, self.overlay, self.windowConsole), self.nextPrio())
 
     def run(self):
         self.lastFrame = int(time.process_time() * 1000)

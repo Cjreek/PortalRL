@@ -4,7 +4,6 @@ from components.position import Position
 from components.renderable import Renderable
 from components.input import Input
 from components.player import Player
-from components.velocity import Velocity
 from components.level import Level
 from components.fov import FOV
 from components.light import Light
@@ -18,3 +17,4 @@ from components.item import Item
 from components.inventoryPosition import InventoryPosition
 from components.trigger import Trigger
 from components.equipment import Equipment
+from components.actor import Actor

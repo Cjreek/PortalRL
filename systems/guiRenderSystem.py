@@ -6,7 +6,7 @@ import guiFunc
 from game import Game
 from systems.baseSystem import BaseSystem
 from components import Position, Renderable, FOV
-from components import Player, Info, Damageable, Velocity, Blocking
+from components import Player, Info, Damageable, Blocking, Actor
 from data import layout, colors
 
 # (Position, Renderable)
@@ -25,16 +25,18 @@ class GUIRenderSystem(BaseSystem):
         playerHP: Damageable
         playerFov: FOV
         playerPos: Position
-        playerEntity, (_, playerPos, info, playerHP, playerFov) = self.world.get_components(Player, Position, Info, Damageable, FOV)[0]
+        playerActor: Actor
+        playerEntity, (_, playerActor, playerPos, info, playerHP, playerFov) = self.world.get_components(Player, Actor, Position, Info, Damageable, FOV)[0]
         self.console.print(1, 4, info.name)
         guiFunc.drawBar(self.console, 1, 5, layout.LBAR_WIDTH-2, 0, playerHP.maxHP, playerHP.hp, [0,0,0], [255, 0, 0])
         self.console.print(1, 5, "HP: " + str(playerHP.hp) + "/" + str(playerHP.maxHP))
+        self.console.print(1, 6, ("•"*playerActor.actionPoints)+"·"*(playerActor.maxActionPoints - playerActor.actionPoints))
 
         # Mob List
         mobHP: Damageable
         position: Position
         n = 0
-        mobList = self.world.get_components(Velocity, Position, Info, Damageable)
+        mobList = self.world.get_components(Actor, Position, Info, Damageable)
         mobList.sort(key=lambda item: dist([playerPos.X, playerPos.Y], [item[1][1].X, item[1][1].Y]))
         for mobEntity, (_, position, info, mobHP) in mobList:
             if playerFov.isVisible(position.X, position.Y) and (mobEntity != playerEntity):

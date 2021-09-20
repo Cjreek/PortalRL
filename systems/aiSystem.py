@@ -1,6 +1,6 @@
 from game import Game
 from systems.baseSystem import BaseSystem
-from components import AI
+from components import AI, Actor
 
 # (AI)
 class AISystem(BaseSystem):
@@ -11,25 +11,42 @@ class AISystem(BaseSystem):
     def reset(self):
         self.waitingFor = []
     
+    def executeEntityActions(self, game: Game, entity, actor: Actor, ai: AI):
+        while (actor.actionPoints > 0) and ((actor.currentAction) or (ai.aiClass.process(entity, actor, game, self.world, ai.rng))):
+            while (actor.currentAction) and (actor.actionPoints > 0):
+                points = min(actor.actionPoints, actor.currentAction.remainingCost)
+                actor.actionPoints -= points
+                actor.currentAction.remainingCost -= points
+                if actor.currentAction.remainingCost == 0:
+                    actor.currentAction.perform(game, self.world, entity)
+                    actor.nextAction()       
+
     def execute(self, game: Game, *args, **kwargs):
         ai: AI
+        actor: Actor
         if (len(self.waitingFor) > 0):
             for item in self.waitingFor:
-                entity, ai = item
+                entity, (ai, actor) = item
                 if not self.world.entity_exists(entity):
                     self.waitingFor.remove(item)
-                elif ai.aiClass.process(entity, game, self.world, ai.rng):
-                    ai.resetInitiative()
-                    self.waitingFor.remove(item)
+                else:
+                    self.executeEntityActions(game, entity, actor, ai)
+                    if actor.actionPoints == 0:
+                        actor.resetInitiative()
+                        actor.resetActionPoints()
+                        self.waitingFor.remove(item)
         else:
-            entityList = self.world.get_component(AI)
+            entityList = self.world.get_components(AI, Actor)
             waitingForAction = False
             while (not waitingForAction):
-                for entity, ai in entityList:
-                    ai.tickInitiative()
-                    if (ai.isReady):
-                        if ai.aiClass.process(entity, game, self.world, ai.rng):
-                            ai.resetInitiative()
+                waitingForAction = False
+                for entity, (ai, actor) in entityList:
+                    actor.tickInitiative()
+                    if (actor.isReady) and self.world.entity_exists(entity):
+                        self.executeEntityActions(game, entity, actor, ai)
+                        if actor.actionPoints == 0:
+                            actor.resetInitiative()
+                            actor.resetActionPoints()
                         else:
-                            self.waitingFor.append((entity, ai))
+                            self.waitingFor.append((entity, (ai, actor)))
                             waitingForAction = True

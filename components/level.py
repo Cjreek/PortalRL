@@ -1,4 +1,3 @@
-import tcod
 import numpy
 
 from rng import RNG
@@ -12,12 +11,20 @@ class Level:
         self.height = height
         self.tiles = numpy.full((self.width, self.height), fill_value=tiles.wall, order="F")
         self.lightmap = numpy.full((self.width, self.height), fill_value=lighting.DARKNESS, order="F")
+        self.entities = {}
+        self.blockingEntities = {}
         self.rooms = []
         self.setSeed(seed)
     
     def setSeed(self, seed):
         self.seed = seed
         self.rng = RNG(self.seed)
+
+    def entitiesAt(self, x: int, y: int, onlyBlocking: bool = False):
+        if onlyBlocking:
+            return self.blockingEntities.get((x, y), [])
+        else:
+            return self.entities.get((x, y), [])
 
     def isWalkable(self, x: int, y: int) -> bool:
         return self.tiles["walkable"][x, y]

@@ -1,7 +1,6 @@
 from systems.entityRenderSystem import EntityRenderSystem
 from systems.levelRenderSystem import LevelRenderSystem
 from systems.inputSystem import InputSystem
-from systems.movementSystem import MovementSystem
 from systems.levelGenerationSystem import LevelGenerationSystem
 from systems.computeFOVSystem import ComputeFOVSystem
 from systems.computeLightingSystem import ComputeLightingSystem
@@ -14,3 +13,4 @@ from systems.baseSystem import BaseSystem
 from systems.overlayRenderSystem import OverlayRenderSystem
 from systems.inventoryRenderSystem import InventoryRenderSystem
 from systems.triggerSystem import TriggerSystem
+from systems.preprocessSystem import PreprocessSystem

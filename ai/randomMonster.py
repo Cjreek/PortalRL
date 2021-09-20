@@ -3,11 +3,38 @@ import esper
 from rng import RNG
 from game import Game
 from ai import AIClass
-from components import Velocity
+from actions import MovementAction, FightingAction, Action, WaitAction
+from components import Actor, Damageable, Position, Level, Info
+from data.enums import Faction
 
 class RandomMonsterAI(AIClass):
-    def process(self, entity, game: Game, world: esper.World, rng: RNG):
-        velocity: Velocity = world.try_component(entity, Velocity)
-        if (velocity):
-            velocity.addStep(rng.randint(-1, 1), rng.randint(-1, 1))
-            return True
+    def getDirectionalAction(self, world: esper.World, level: Level, ownFaction: Faction, position: Position, dx: int, dy: int):
+        tileEntities = level.entitiesAt(position.X + dx, position.Y + dy, True)
+        
+        defenderEntity = None
+        for entity in tileEntities:
+            info: Info
+            info, damageable = world.try_components(entity, Info, Damageable)
+            if ((info and damageable) and (info.faction != ownFaction)):
+                defenderEntity = entity
+                break
+
+        if defenderEntity:
+            return FightingAction(defenderEntity)
+        else:
+            return MovementAction(dx, dy, costModifier=-2)
+
+    def process(self, entity, actor: Actor, game: Game, world: esper.World, rng: RNG):
+        entityInfo = world.component_for_entity(entity, Info)
+        position = world.component_for_entity(entity, Position)
+        _, level = world.get_component(Level)[0]
+
+        dx, dy = rng.randint(-1, 1), rng.randint(-1, 1)
+        
+        action: Action = None
+        if (dx == 0) and (dy == 0):
+            action = WaitAction(actor.actionPoints)
+        else:
+            action = self.getDirectionalAction(world, level, entityInfo.faction, position, dx, dy)
+        actor.queueAction(action)
+        return True
