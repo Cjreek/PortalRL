@@ -1,25 +1,14 @@
 from typing import Tuple
 import numpy
 
-GraphicRec = numpy.dtype([
-    ("symbol", numpy.int32),
-    ("fg", numpy.double, 3),
-    ("bg", numpy.double, 3),
-])
-
-TileRec = numpy.dtype([
-    ("walkable", numpy.bool),
-    ("transparent", numpy.bool),
-    ("darkGfx", GraphicRec),
-    ("visibleGfx", GraphicRec),
-])
+from data.types import Tile, TileGraphic
 
 def makeTile(*, walkable: int, transparent: int, darkGfx, visibleGfx: Tuple[int, Tuple[float, float, float], Tuple[float, float, float]]) -> numpy.ndarray:
-    return numpy.array((walkable, transparent, darkGfx, visibleGfx), dtype=TileRec)
+    return numpy.array((walkable, transparent, darkGfx, visibleGfx), dtype=Tile)
 
 # Tile definitions
 
-shroudGfx = numpy.array((ord(" "), (0, 0, 0), (0, 0, 0)), dtype=GraphicRec)
+shroudGfx = numpy.array((ord(" "), (0, 0, 0), (0, 0, 0)), dtype=TileGraphic)
 
 floor = makeTile(
     walkable=True, 

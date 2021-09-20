@@ -67,7 +67,7 @@ class MainMenu(tcod.event.EventDispatch[bool]):
         if self.game.state == GameState.MAINMENU:
             centerX = console.width // 2 - (self.maxItemWidth // 2)
             n = 0
-            self.visibleItems = []
+            self.visibleItems.clear()
             for i in range(len(self.menuItems)):
                 if self.menuItems[i].visibleFunc():
                     self.visibleItems.append(self.menuItems[i])

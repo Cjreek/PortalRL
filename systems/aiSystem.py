@@ -9,7 +9,7 @@ class AISystem(BaseSystem):
         self.waitingFor = []
 
     def reset(self):
-        self.waitingFor = []
+        self.waitingFor.clear()
     
     def executeEntityActions(self, game: Game, entity, actor: Actor, ai: AI):
         while (actor.actionPoints > 0) and ((actor.currentAction) or (ai.aiClass.process(entity, actor, game, self.world, ai.rng))):

@@ -43,7 +43,7 @@ class Engine:
         self.lastFrame = int(time.process_time() * 1000)
         if sum(self.frametimes) >= 500:
             self.game.fps = 1000 / (sum(self.frametimes) / len(self.frametimes))
-            self.frametimes = []
+            self.frametimes.clear()
         
     def nextPrio(self):
         self.ecsPriority -= 1
