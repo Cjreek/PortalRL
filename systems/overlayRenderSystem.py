@@ -3,14 +3,14 @@ from tcod import Console
 
 from game import Game
 from systems.baseSystem import BaseSystem
-from components import Player, FOV, Input
+from components import Player, FOV, Input, Level
 
 class OverlayRenderSystem(BaseSystem):
     def __init__(self, overlay: Console) -> None:
         super().__init__()
         self.overlay = overlay
 
-    def execute(self, game: Game, *args, **kwargs):
+    def execute(self, game: Game, level: Level):
         if game.showFOV:
             playerFov: FOV
             _, (_, playerFov) = self.world.get_components(Player, FOV)[0]

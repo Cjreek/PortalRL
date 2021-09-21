@@ -2,6 +2,7 @@
 import esper
 
 from game import Game
+from components.level import Level
 from actions.action import Action
 
 class WaitAction(Action):
@@ -11,5 +12,5 @@ class WaitAction(Action):
     def getPointCost(self) -> int:
         return 0
 
-    def perform(self, game: Game, world: esper.World, entity):
+    def perform(self, game: Game, world: esper.World, level: Level, entity):
         pass

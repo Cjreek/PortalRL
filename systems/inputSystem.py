@@ -3,7 +3,7 @@ import tcod.event
 
 from game import Game
 from systems.baseSystem import BaseSystem
-from components import Input
+from components import Input, Level
 from data import layout
 
 # (Input)
@@ -12,7 +12,7 @@ class InputSystem(BaseSystem):
         super().__init__()
         self.context = context
 
-    def execute(self, game: Game, *args, **kwargs):
+    def execute(self, game: Game, level: Level):
         input: Input
 
         for _, input in self.world.get_component(Input):

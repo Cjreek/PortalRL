@@ -5,6 +5,7 @@ from actions.action import Action
 from components.melee import Melee
 from components.damageable import Damageable
 from components.info import Info
+from components.level import Level
 
 class FightingAction(Action):
     def __init__(self, defenderEntity, costModifier: int = 0) -> None:
@@ -27,5 +28,5 @@ class FightingAction(Action):
             if defenderDamageable.isDead:
                 game.logMessage(f"{attackerInfo.name} kills {defenderInfo.name}")
 
-    def perform(self, game: Game, world: esper.World, entity):
+    def perform(self, game: Game, world: esper.World, level: Level, entity):
         self.attackEntity(game, world, entity, self.defenderEntity)

@@ -24,10 +24,9 @@ class RandomMonsterAI(AIClass):
         else:
             return MovementAction(dx, dy, costModifier=-2)
 
-    def process(self, entity, actor: Actor, game: Game, world: esper.World, rng: RNG):
+    def process(self, entity, actor: Actor, level: Level, game: Game, world: esper.World, rng: RNG):
         entityInfo = world.component_for_entity(entity, Info)
         position = world.component_for_entity(entity, Position)
-        _, level = world.get_component(Level)[0]
 
         dx, dy = rng.randint(-1, 1), rng.randint(-1, 1)
         

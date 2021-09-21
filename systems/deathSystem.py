@@ -1,11 +1,11 @@
 from game import Game, GameState
 from systems.baseSystem import BaseSystem
-from components import Player, Position, Damageable, Blocking
+from components import Player, Position, Damageable, Blocking, Level
 from data import mobs
 
 # (Player, Input, Blocking)
 class DeathSystem(BaseSystem):   
-    def execute(self, game: Game, *args, **kwargs):
+    def execute(self, game: Game, level: Level):
         position: Position
         damageable: Damageable
         for entity, (position, damageable) in self.world.get_components(Position, Damageable):

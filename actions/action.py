@@ -1,6 +1,7 @@
 import esper
 
 from game import Game
+from components.level import Level
 
 class Action:
     def __init__(self, costModifier: int = 0) -> None:
@@ -10,5 +11,5 @@ class Action:
     def getPointCost(self) -> int:
         return 1
     
-    def perform(self, game: Game, world: esper.World, entity):
+    def perform(self, game: Game, world: esper.World, level: Level, entity):
         pass

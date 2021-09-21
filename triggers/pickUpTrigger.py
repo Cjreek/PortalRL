@@ -3,14 +3,14 @@ import esper
 from game import Game
 
 from triggers.triggerFunction import TriggerFunction
-from components import Info, Inventory, Position, Item
+from components import Info, Inventory, Position, Item, Level
 from data.types import InventoryItem
 
 class PickupTrigger(TriggerFunction):
     def requiredComponents(self):
         return [Info, Inventory]
 
-    def execute(self, game: Game, world: esper.World, activatorEntity, triggerEntity):
+    def execute(self, game: Game, world: esper.World, level: Level, activatorEntity, triggerEntity):
         inventory = world.component_for_entity(activatorEntity, Inventory)
         activatorInfo = world.component_for_entity(activatorEntity, Info)
         triggerInfo = world.component_for_entity(triggerEntity, Info) 

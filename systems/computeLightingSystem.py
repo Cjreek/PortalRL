@@ -3,10 +3,10 @@ import numpy
 
 from game import Game
 from systems.baseSystem import BaseSystem
-from components import Position, Light, FOV, Player
+from components import Position, Light, FOV, Player, Level
 from data import layout, colors
                     
-# (Level), (Position, FOV, Light)
+# (Position, FOV, Light)
 class ComputeLightingSystem(BaseSystem):
 
     def calculateLighting(self, position: Position, light: Light, fov: FOV):
@@ -21,7 +21,7 @@ class ComputeLightingSystem(BaseSystem):
                         light.lightMap["color"][targetX, targetY] = light.color
                         light.lightMap["level"][targetX, targetY] = light.intensity -  d
 
-    def execute(self, game: Game, *args, **kwargs):
+    def execute(self, game: Game, level: Level):
         position: Position
         fov: FOV
         light: Light

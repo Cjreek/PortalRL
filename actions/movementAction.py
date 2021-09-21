@@ -28,9 +28,7 @@ class MovementAction(Action):
             light = world.component_for_entity(entity, Light)
             light.dirty = True
         
-    def perform(self, game: Game, world: esper.World, entity):
-        level: Level
-        _, level = world.get_component(Level)[0]
+    def perform(self, game: Game, world: esper.World, level: Level, entity):
         position = world.component_for_entity(entity, Position)
 
         destX = position.X + self.dx

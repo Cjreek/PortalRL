@@ -6,7 +6,7 @@ import guiFunc
 from game import Game
 from systems.baseSystem import BaseSystem
 from components import Position, Renderable, FOV
-from components import Player, Info, Damageable, Blocking, Actor
+from components import Player, Info, Damageable, Blocking, Actor, Level
 from data import layout, colors
 
 # (Position, Renderable)
@@ -15,7 +15,7 @@ class GUIRenderSystem(BaseSystem):
         super().__init__()
         self.console = console
 
-    def execute(self, game: Game, *args, **kwargs):
+    def execute(self, game: Game, level: Level):
         guiFunc.drawFrame(self.console, layout.LBAR_OFFSET_X, layout.LBAR_OFFSET_Y, layout.LBAR_OFFSET_X + layout.LBAR_WIDTH, layout.LBAR_OFFSET_Y + layout.LBAR_HEIGHT)
         guiFunc.drawFrame(self.console, layout.RBAR_OFFSET_X, layout.RBAR_OFFSET_Y, layout.RBAR_OFFSET_X + layout.RBAR_WIDTH, layout.RBAR_OFFSET_Y + layout.RBAR_HEIGHT)
         guiFunc.drawFrame(self.console, layout.BBAR_OFFSET_X, layout.BBAR_OFFSET_Y, layout.BBAR_OFFSET_X + layout.BBAR_WIDTH, layout.BBAR_OFFSET_Y + layout.BBAR_HEIGHT)

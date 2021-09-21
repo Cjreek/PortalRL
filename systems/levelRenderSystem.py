@@ -8,7 +8,7 @@ from systems.baseSystem import BaseSystem
 from components import Level, Player, FOV, Light
 from data import tiles, colors, lighting
 
-# (Level), (Player, FOV)
+# (Player, FOV)
 class LevelRenderSystem(BaseSystem):
     def __init__(self, console: Console, posX: int, posY: int) -> None:
         super().__init__()
@@ -28,23 +28,21 @@ class LevelRenderSystem(BaseSystem):
     def applyLighting(self, tiles, lightmap):
         tiles["fg"] = ((tiles["fg"] + lightmap["color"]) / 2) * (lightmap["level"] / lighting.MAX_LIGHT_LEVEL)[:,:, None]
 
-    def execute(self, game: Game, *args, **kwargs): 
-        level: Level
+    def execute(self, game: Game, level: Level): 
         playerFOV: FOV
         _, (_, playerFOV) = self.world.get_components(Player, FOV)[0]
-        for _, level in sorted(self.world.get_component(Level)):
 
-            sliceX = slice(self.posX, self.posX + level.width)
-            sliceY = slice(self.posY, self.posY + level.height)
+        sliceX = slice(self.posX, self.posX + level.width)
+        sliceY = slice(self.posY, self.posY + level.height)
 
-            if game.showMap:
-                selectedTiles = copy.deepcopy(level.tiles["visibleGfx"])
-            else:
-                selectedTiles = numpy.select(condlist=[playerFOV.fov], choicelist=[level.tiles["visibleGfx"]], default=tiles.shroudGfx)
+        if game.showMap:
+            selectedTiles = copy.deepcopy(level.tiles["visibleGfx"])
+        else:
+            selectedTiles = numpy.select(condlist=[playerFOV.fov], choicelist=[level.tiles["visibleGfx"]], default=tiles.shroudGfx)
 
-            # lighting
-            if game.useLighting:
-                self.updateLighting(level.lightmap)
-                self.applyLighting(selectedTiles, level.lightmap)
+        # lighting
+        if game.useLighting:
+            self.updateLighting(level.lightmap)
+            self.applyLighting(selectedTiles, level.lightmap)
 
-            self.console.tiles_rgb[sliceX, sliceY] = selectedTiles
+        self.console.tiles_rgb[sliceX, sliceY] = selectedTiles

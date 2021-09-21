@@ -2,11 +2,11 @@ import tcod.event
 
 from game import Game, GameState
 from systems.baseSystem import BaseSystem
-from components import Debug, Input
+from components import Debug, Input, Level
 
 # (Debug, Input)
 class DebugSystem(BaseSystem):
-    def execute(self, game: Game, *args, **kwargs):
+    def execute(self, game: Game, level: Level):
         input: Input
         _, (_, input) = self.world.get_components(Debug, Input)[0]
         if (input.Debug):

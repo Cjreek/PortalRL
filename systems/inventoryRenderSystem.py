@@ -4,7 +4,7 @@ import tcod
 import guiFunc
 
 from game import Game, GameState
-from components import Player, Inventory, Position, Input, Trigger, Equipment
+from components import Player, Inventory, Position, Input, Trigger, Equipment, Level
 from triggers import PickupTrigger
 from systems.baseSystem import BaseSystem
 from data import layout, colors
@@ -111,7 +111,7 @@ class InventoryRenderSystem(BaseSystem):
                 self.console.print(posX + 2, posY + 3 + n, F"{n+1})................", color)
             n += 1
 
-    def execute(self, game: Game, *args, **kwargs):
+    def execute(self, game: Game, level: Level):
         _, (_, position, input, inventory, equipment) = self.world.get_components(Player, Position, Input, Inventory, Equipment)[0]
         self.handleInventoryInput(position, input, equipment, inventory)
         self.drawInventory(equipment, inventory)

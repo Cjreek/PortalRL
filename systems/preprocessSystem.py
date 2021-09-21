@@ -5,10 +5,7 @@ from systems.baseSystem import BaseSystem
 from components import Level
 
 class PreprocessSystem(BaseSystem):
-    def execute(self, game: Game, *args, **kwargs):
-        level: Level
-        _, level = self.world.get_component(Level)[0]
-
+    def execute(self, game: Game, level: Level):
         position: Position
         level.entities.clear()
         for entity, position in self.world.get_component(Position):
