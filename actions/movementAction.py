@@ -34,4 +34,5 @@ class MovementAction(Action):
         destX = position.X + self.dx
         destY = position.Y + self.dy
         if level.isWalkable(destX, destY):
+            level.reportEntityMovement(entity, (position.X, position.Y), (destX, destY))
             self.moveEntity(world, entity, position, destX, destY)

@@ -1,3 +1,4 @@
+from typing import Tuple
 import numpy
 
 from rng import RNG
@@ -25,6 +26,20 @@ class Level:
             return self.blockingEntities.get((x, y), [])
         else:
             return self.entities.get((x, y), [])
+
+    def reportEntityMovement(self, entity, oldPos: Tuple[int, int], newPos: Tuple[int, int]):       
+        self.entities[oldPos].remove(entity)
+        if not (newPos in self.entities):
+            self.entities[newPos] = [entity]
+        else:
+            self.entities[newPos].append(entity)
+
+        if (oldPos in self.blockingEntities) and (entity in self.blockingEntities[oldPos]):
+            self.blockingEntities[oldPos].remove(entity)
+            if not (newPos in self.blockingEntities):
+                self.blockingEntities[newPos] = [entity]
+            else:
+                self.blockingEntities[newPos].append(entity)
 
     def isWalkable(self, x: int, y: int) -> bool:
         return self.tiles["walkable"][x, y]

@@ -9,20 +9,13 @@ from data.enums import Faction
 
 class RandomMonsterAI(AIClass):
     def getDirectionalAction(self, world: esper.World, level: Level, ownFaction: Faction, position: Position, dx: int, dy: int):
-        tileEntities = level.entitiesAt(position.X + dx, position.Y + dy, True)
-        
-        defenderEntity = None
-        for entity in tileEntities:
+        for entity in level.entitiesAt(position.X + dx, position.Y + dy, True):
             info: Info
             info, damageable = world.try_components(entity, Info, Damageable)
             if ((info and damageable) and (info.faction != ownFaction)):
-                defenderEntity = entity
-                break
+                return FightingAction(position.X + dx, position.Y + dy, entity)
 
-        if defenderEntity:
-            return FightingAction(defenderEntity)
-        else:
-            return MovementAction(dx, dy, costModifier=-2)
+        return MovementAction(dx, dy, costModifier=-2)
 
     def process(self, entity, actor: Actor, level: Level, game: Game, world: esper.World, rng: RNG):
         entityInfo = world.component_for_entity(entity, Info)
@@ -36,4 +29,5 @@ class RandomMonsterAI(AIClass):
         else:
             action = self.getDirectionalAction(world, level, entityInfo.faction, position, dx, dy)
         actor.queueAction(action)
+
         return True
